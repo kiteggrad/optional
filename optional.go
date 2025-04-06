@@ -3,6 +3,11 @@
 // and simplifying checks for empty or unset values.
 package optional
 
+import "errors"
+
+// ErrNotSet - could be returned in some cases when value is not set.
+var ErrNotSet = errors.New("value is not set")
+
 // T - structure for optional values.
 // It is used to avoid using pointers for optional values.
 // We use comparable type for having possibility to easily check if value is empty.
@@ -67,10 +72,10 @@ func (o T[V]) IsSet() bool {
 	return o.isSet
 }
 
-// MustValue - get value and panic if value is not set.
+// MustValue - get value or panics with ErrNotSet if value is not set.
 func (o T[V]) MustValue() V {
 	if !o.isSet {
-		panic("value is not set")
+		panic(ErrNotSet)
 	}
 
 	return o.value
