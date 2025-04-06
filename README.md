@@ -2,7 +2,7 @@
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/kiteggrad/optional)](https://pkg.go.dev/github.com/kiteggrad/optional)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kiteggrad/optional)](https://goreportcard.com/report/github.com/kiteggrad/optional)
-[![codecov](https://codecov.io/gh/kiteggrad/optional/branch/master/graph/badge.svg)](https://codecov.io/gh/kiteggrad/optional)
+[![codecov](https://codecov.io/gh/kiteggrad/optional/branch/main/graph/badge.svg?token=CKNT814QRN)](https://codecov.io/gh/kiteggrad/optional)
 
 `optional` is a library for working with optional values in Go, designed to avoid using pointers for optional fields.
 
