@@ -27,18 +27,18 @@ import (
 )
 
 type Config struct {
-    Host        optional.T[string]
-    Port        optional.T[string]
-    RetryCount  optional.T[int]
+	Host       optional.T[string]
+	Port       optional.T[string]
+	RetryCount optional.T[int]
 }
 
 func main() {
-    // Initialize some config with som
+	// Initialize some config with som
 	cfg := Config{
-        Host:       optional.NewSetNotEmpty(getSomeHost()),
-        Port:       optional.NewSetNotEmpty("8080"),
-        RetryCount: optional.NewSet(0),
-    }
+		Host:       optional.NewSetNotEmpty(getSomeHost()),
+		Port:       optional.NewSetNotEmpty("8080"),
+		RetryCount: optional.NewSet(0),
+	}
 	fmt.Println(cfg.Host.IsSet())       // Output: false / localhost
 	fmt.Println(cfg.Port.IsSet())       // Output: true
 	fmt.Println(cfg.RetryCount.IsSet()) // Output: true
@@ -54,11 +54,11 @@ func main() {
 }
 
 func getSomeHost() string {
-    if rand.Int()%2 == 0 {
-        return ""
-    }
+	if rand.Int()%2 == 0 {
+		return ""
+	}
 
-    return "localhost"
+	return "localhost"
 }
 ```
 
