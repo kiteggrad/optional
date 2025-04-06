@@ -39,7 +39,7 @@ func main() {
 		Port:       optional.NewSetNotEmpty("8080"),
 		RetryCount: optional.NewSet(0),
 	}
-	fmt.Println(cfg.Host.IsSet())       // Output: false / localhost
+	fmt.Println(cfg.Host.IsSet())       // Output: true / false
 	fmt.Println(cfg.Port.IsSet())       // Output: true
 	fmt.Println(cfg.RetryCount.IsSet()) // Output: true
 
