@@ -10,6 +10,7 @@ linters:
     - depguard # currently we don't use other modules
     - wsl # causes "assignments should only be cuddled with other assignments"
     - ireturn # causes "returns generic interface (V) of type param comparable"
+    - exhaustruct # not needed, this module is small and simple
 
   exclusions:
     rules:

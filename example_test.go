@@ -176,3 +176,36 @@ func ExampleT_SetDefault_in_struct() {
 	// Output:
 	// 8080
 }
+
+func ExampleNewSet() {
+	opt := optional.NewSet("Hello, World!")
+	fmt.Println(opt.IsSet())
+	fmt.Println(opt.Value())
+
+	// Output:
+	// true
+	// Hello, World!
+}
+
+func ExampleNewSet_empty() {
+	opt := optional.NewSet("")
+	fmt.Println(opt.IsSet())
+	fmt.Println(opt.Value())
+
+	// Output:
+	// true
+}
+
+func ExampleNewSetNotEmpty() {
+	opt := optional.NewSetNotEmpty("")
+	fmt.Println(opt.IsSet())
+
+	opt = optional.NewSetNotEmpty("Hello, World!")
+	fmt.Println(opt.IsSet())
+	fmt.Println(opt.Value())
+
+	// Output:
+	// false
+	// true
+	// Hello, World!
+}

@@ -23,6 +23,21 @@ type T[V comparable] struct {
 	isSet bool
 }
 
+// NewSetNotEmpty - create new optional value with default value.
+//   - if value is empty, returns with isSet=false.
+func NewSetNotEmpty[V comparable](value V) T[V] {
+	o := T[V]{}
+
+	return o.SetNotEmpty(value)
+}
+
+// NewSet - create new optional value with setted value.
+//   - Unlike NewDefault, this function does not check if value is empty.
+//     It returns isSet=true always.
+func NewSet[V comparable](value V) T[V] {
+	return T[V]{value: value, isSet: true}
+}
+
 // Set value and change isSet to true.
 func (o T[V]) Set(value V) T[V] {
 	o.value = value
