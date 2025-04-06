@@ -1,0 +1,36 @@
+version: "2"
+
+run:
+  timeout: 10s
+
+linters:
+  default: all
+
+  disable:
+    - depguard # currently we don't use other modules
+    - wsl # causes "assignments should only be cuddled with other assignments"
+    - ireturn # causes "returns generic interface (V) of type param comparable"
+
+  exclusions:
+    rules:
+      - path: .*_test.go
+        linters:
+          - wsl
+          - exhaustruct
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+    - gofumpt
+
+  settings:
+    gci:
+      sections:
+        - standard
+        - default
+        - prefix(github.com/kiteggrad)
+        - localmodule
+        - blank
+        - dot
