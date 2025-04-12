@@ -5,19 +5,20 @@ changelog:
   categories:
     - title: '✨ Exciting New Features'
       labels:
-        - '*'
+        - 'feat'
     - title: '🚀 New Features'
       labels:
-        - '*'
+        - 'feat'
     - title: '🐛 Bug Fixes'
       labels:
-        - '*'
+        - 'bug'
+        - 'fix'
     - title: '📦 Dependencies'
       labels:
-        - '*'
+        - 'deps'
     - title: '🔧 Maintenance'
       labels:
-        - '*'
+        - 'chore'
     - title: '⚙️ Other Changes'
       labels:
         - '*'
