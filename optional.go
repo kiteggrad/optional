@@ -23,6 +23,17 @@ type T[V comparable] struct {
 	isSet bool
 }
 
+// NewFromPtr - create new optional value from pointer.
+// If pointer is nil, it returns value with isSet=false.
+// Otherwise, it returns value with isSet=true.
+func NewFromPtr[V comparable](ptr *V) T[V] {
+	if ptr == nil {
+		return T[V]{}
+	}
+
+	return T[V]{value: *ptr, isSet: true}
+}
+
 // NewSetNotEmpty - create new optional value with default value.
 //   - if value is empty, returns with isSet=false.
 func NewSetNotEmpty[V comparable](value V) T[V] {
@@ -42,6 +53,21 @@ func NewSet[V comparable](value V) T[V] {
 func (o T[V]) Set(value V) T[V] {
 	o.value = value
 	o.isSet = true
+
+	return o
+}
+
+// SetPtr - set value from pointer.
+// If pointer is nil, it sets isSet=false.
+func (o T[V]) SetPtr(ptr *V) T[V] {
+	if ptr == nil {
+		var empty V
+		o.isSet = false
+		o.value = empty
+	} else {
+		o.value = *ptr
+		o.isSet = true
+	}
 
 	return o
 }

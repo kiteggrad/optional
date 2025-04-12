@@ -209,3 +209,29 @@ func ExampleNewSetNotEmpty() {
 	// true
 	// Hello, World!
 }
+
+func ExampleT_SetPtr() {
+	type Config struct {
+		Port optional.T[int]
+	}
+	cfg := Config{}
+
+	// Creating a pointer to a value
+	port := 8080
+	portPtr := &port
+
+	// Setting value from the pointer
+	cfg.Port = cfg.Port.SetPtr(portPtr)
+	fmt.Println(cfg.Port.IsSet())
+	fmt.Println(cfg.Port.Value())
+
+	// Setting nil pointer (value will be unset)
+	var nilPtr *int
+	cfg.Port = cfg.Port.SetPtr(nilPtr)
+	fmt.Println(cfg.Port.IsSet())
+
+	// Output:
+	// true
+	// 8080
+	// false
+}
