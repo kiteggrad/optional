@@ -85,14 +85,11 @@ func (o T[V]) SetNotEmpty(value V) T[V] {
 	return o
 }
 
-// SetAuto - set value and change isSet to false if value is empty.
+// SetAuto - set value and change isSet to false if value is empty or to true if value is not empty.
 func (o T[V]) SetAuto(value V) T[V] {
 	var empty V
 
-	if value == empty {
-		o.isSet = false
-	}
-
+	o.isSet = value != empty
 	o.value = value
 
 	return o
