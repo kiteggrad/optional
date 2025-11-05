@@ -1,8 +1,8 @@
 # optional
 
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/kiteggrad/optional)](https://pkg.go.dev/github.com/kiteggrad/optional)
-[![Go Report Card](https://goreportcard.com/badge/github.com/kiteggrad/optional)](https://goreportcard.com/report/github.com/kiteggrad/optional)
-[![codecov](https://codecov.io/gh/kiteggrad/optional/branch/main/graph/badge.svg?token=CKNT814QRN)](https://codecov.io/gh/kiteggrad/optional)
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/kiteggrad/optional/v2)](https://pkg.go.dev/github.com/kiteggrad/optional/v2)
+[![Go Report Card](https://goreportcard.com/badge/github.com/kiteggrad/optional/v2)](https://goreportcard.com/report/github.com/kiteggrad/optional/v2)
+[![codecov](https://codecov.io/gh/kiteggrad/optional/branch/main/graph/badge.svg?token=CKNT814QRN)](https://codecov.io/gh/kiteggrad/optional/v2)
 
 A lightweight, type-safe library for optional values in Go. Say goodbye to nil pointer panics and confusing zero values.
 
