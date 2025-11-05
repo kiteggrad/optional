@@ -8,16 +8,10 @@ linters:
 
   disable:
     - depguard # currently we don't use other modules
-    - wsl # causes "assignments should only be cuddled with other assignments"
+    - wsl # too noisy
+    - wsl_v5 # new version of wsl linter
     - ireturn # causes "returns generic interface (V) of type param comparable"
     - exhaustruct # not needed, this module is small and simple
-
-  exclusions:
-    rules:
-      - path: .*_test.go
-        linters:
-          - wsl
-          - exhaustruct
 
 formatters:
   enable:
