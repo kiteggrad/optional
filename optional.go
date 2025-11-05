@@ -1,6 +1,5 @@
 // Package optional provides a generic implementation for optional values in Go.
-// It allows working with optional fields without using pointers, ensuring type safety
-// and simplifying checks for empty or unset values.
+// It allows working with optional fields without using pointers.
 package optional
 
 import "errors"
@@ -10,99 +9,54 @@ var ErrNotSet = errors.New("value is not set")
 
 // T - structure for optional values.
 // It is used to avoid using pointers for optional values.
-// We use comparable type for having possibility to easily check if value is empty.
-//
-// Do not try to use it with pointer types, the methods will not work as expected.
-// Pointer types are already optional by default - just use nil check.
 //
 // Example:
 //
 //	var opt optional.T[string]
-type T[V comparable] struct {
+type T[V any] struct {
 	value V
 	isSet bool
 }
 
-// NewFromPtr - create new optional value from pointer.
-// If pointer is nil, it returns value with isSet=false.
-// Otherwise, it returns value with isSet=true.
-func NewFromPtr[V comparable](ptr *V) T[V] {
+// New - create new optional value.
+//   - isSet - indicates whether the value is set or not.
+//   - If isSet is false, value will be the zero value of type V
+//     regardless of the provided value.
+//
+// Example:
+//
+//	opt := optional.New("value", true)  // opt is set to "value"
+//	opt2 := optional.New("value", false) // opt2 is not set, value is ""
+//	opt3 := optional.New(slice, slice != nil) // opt3 is set if slice is not nil
+//	s.optField = optional.New(someValue, someCondition) // instead of unexisting Set() method
+func New[V any](value V, isSet bool) T[V] {
+	if !isSet {
+		var empty V
+		value = empty
+	}
+
+	return T[V]{value: value, isSet: isSet}
+}
+
+// NewPtr - create new optional value from pointer.
+//   - If ptr is nil, the optional value will be not set.
+//   - If ptr is not nil, the optional value will be set to the value pointed by ptr.
+//   - Doesn't work with reference types, e.g. slices, maps, etc. You can use New(slice, slice != nil) instead.
+//
+// Example:
+//
+//	var strPtr *string
+//	opt1 := optional.NewPtr(strPtr) // opt1 is not set
+//
+//	value := "hello"
+//	strPtr = &value
+//	opt2 := optional.NewPtr(strPtr) // opt2 is set to "hello"
+func NewPtr[V any](ptr *V) T[V] {
 	if ptr == nil {
 		return T[V]{}
 	}
 
-	return T[V]{value: *ptr, isSet: true}
-}
-
-// NewSetNotEmpty - create new optional value with default value.
-//   - if value is empty, returns with isSet=false.
-func NewSetNotEmpty[V comparable](value V) T[V] {
-	o := T[V]{}
-
-	return o.SetNotEmpty(value)
-}
-
-// NewSet - create new optional value with setted value.
-//   - Unlike NewDefault, this function does not check if value is empty.
-//     It returns isSet=true always.
-func NewSet[V comparable](value V) T[V] {
-	return T[V]{value: value, isSet: true}
-}
-
-// Set value and change isSet to true.
-func (o T[V]) Set(value V) T[V] {
-	o.value = value
-	o.isSet = true
-
-	return o
-}
-
-// SetPtr - set value from pointer.
-// If pointer is nil, it sets isSet=false.
-func (o T[V]) SetPtr(ptr *V) T[V] {
-	if ptr == nil {
-		var empty V
-		o.isSet = false
-		o.value = empty
-	} else {
-		o.value = *ptr
-		o.isSet = true
-	}
-
-	return o
-}
-
-// SetNotEmpty - sets the value if it is not empty and marks it as set.
-func (o T[V]) SetNotEmpty(value V) T[V] {
-	var empty V
-	if value == empty {
-		return o
-	}
-
-	o.value = value
-	o.isSet = true
-
-	return o
-}
-
-// SetAuto - set value and change isSet to false if value is empty or to true if value is not empty.
-func (o T[V]) SetAuto(value V) T[V] {
-	var empty V
-
-	o.isSet = value != empty
-	o.value = value
-
-	return o
-}
-
-// Unset - set value to empty and change isSet to false.
-func (o T[V]) Unset() T[V] {
-	var empty V
-
-	o.value = empty
-	o.isSet = false
-
-	return o
+	return New(*ptr, true)
 }
 
 // IsSet - check if value is set.
@@ -124,21 +78,11 @@ func (o T[V]) Value() V {
 	return o.value
 }
 
-// IsEmpty - check if value is empty.
-func (o T[V]) IsEmpty() bool {
-	var empty V
-
-	return o.value == empty
-}
-
-// SetDefault - set value and isSet=true if isSet is false.
-func (o T[V]) SetDefault(value V) T[V] {
-	if o.isSet {
-		return o
+// Ptr - get pointer to value or nil if value is not set.
+func (o T[V]) Ptr() *V {
+	if !o.isSet {
+		return nil
 	}
 
-	o.value = value
-	o.isSet = true
-
-	return o
+	return &o.value
 }

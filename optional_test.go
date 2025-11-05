@@ -6,232 +6,197 @@ import (
 	"github.com/kiteggrad/optional"
 )
 
-func ExampleT_Set() {
-	type Config struct {
-		Name optional.T[string]
-	}
-	cfg := Config{}
+func ExampleNew() {
+	// Creating optional with value set
+	opt1 := optional.New("AppName", true)
+	fmt.Println(opt1.IsSet())
+	fmt.Println(opt1.Value())
 
-	cfg.Name = cfg.Name.Set("AppName")
-	fmt.Println(cfg.Name.Value())
-
-	// Output: AppName
-}
-
-func ExampleT_SetNotEmpty() {
-	type Config struct {
-		Name optional.T[string]
-	}
-	cfg := Config{}
-
-	cfg.Name = cfg.Name.SetNotEmpty("")
-	fmt.Println(cfg.Name.IsSet())
-
-	cfg.Name = cfg.Name.SetNotEmpty("AppName")
-	fmt.Println(cfg.Name.Value())
-
-	cfg.Name = cfg.Name.SetNotEmpty("")
-	fmt.Println(cfg.Name.IsSet())
+	// Creating optional without value set
+	opt2 := optional.New("AppName", false)
+	fmt.Println(opt2.IsSet())
+	fmt.Println(opt2.Value())
 
 	// Output:
-	// false
-	// AppName
 	// true
+	// AppName
+	// false
+	//
 }
 
-func ExampleT_SetAuto() {
-	type Config struct {
-		Port optional.T[string]
-	}
-	cfg := Config{}
+func ExampleNewPtr() {
+	// With non-nil pointer
+	value := "Hello"
+	opt1 := optional.NewPtr(&value)
+	fmt.Println(opt1.IsSet())
+	fmt.Println(opt1.Value())
 
-	cfg.Port = cfg.Port.SetAuto("")
-	fmt.Println(cfg.Port.IsSet())
+	// With nil pointer
+	var nilPtr *string
+	opt2 := optional.NewPtr(nilPtr)
+	fmt.Println(opt2.IsSet())
 
-	cfg.Port = cfg.Port.SetAuto("8080")
-	fmt.Println(cfg.Port.Value())
-
-	cfg.Port = cfg.Port.SetAuto("")
-	fmt.Println(cfg.Port.IsSet())
-
-	// Output:
-	// false
-	// 8080
-	// false
-}
-
-func ExampleT_Unset() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	cfg := Config{}
-
-	cfg.Port = cfg.Port.Set(8080)
-
-	cfg.Port = cfg.Port.Unset()
-	fmt.Println(cfg.Port.IsSet())
-	fmt.Println(cfg.Port.Value())
+	// With different types
+	num := 42
+	opt3 := optional.NewPtr(&num)
+	fmt.Println(opt3.IsSet())
+	fmt.Println(opt3.Value())
 
 	// Output:
+	// true
+	// Hello
 	// false
-	// 0
+	// true
+	// 42
 }
 
 func ExampleT_IsSet() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	cfg := Config{}
+	var opt optional.T[int]
+	fmt.Println(opt.IsSet())
 
-	fmt.Println(cfg.Port.IsSet())
-
-	cfg.Port = cfg.Port.Set(8080)
-	fmt.Println(cfg.Port.IsSet())
+	opt = optional.New(8080, true)
+	fmt.Println(opt.IsSet())
 
 	// Output:
 	// false
 	// true
 }
 
-func ExampleT_MustValue() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	cfg := Config{}
+func ExampleT_Value() {
+	var opt optional.T[int]
+	fmt.Println(opt.Value())
 
-	cfg.Port = cfg.Port.Set(8080)
-	fmt.Println(cfg.Port.MustValue())
+	opt = optional.New(8080, true)
+	fmt.Println(opt.Value())
+
+	// Output:
+	// 0
+	// 8080
+}
+
+func ExampleT_MustValue() {
+	opt := optional.New(8080, true)
+	fmt.Println(opt.MustValue())
 
 	// Output: 8080
 }
 
-func ExampleT_Value() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	cfg := Config{}
+func ExampleT_Ptr() {
+	var opt optional.T[int]
+	ptr := opt.Ptr()
+	fmt.Println(ptr == nil)
 
-	fmt.Println(cfg.Port.Value())
-
-	cfg.Port = cfg.Port.Set(8080)
-	fmt.Println(cfg.Port.Value())
-
-	// Output:
-	// 0
-	// 8080
-}
-
-func ExampleT_IsEmpty() {
-	type Config struct {
-		Name optional.T[string]
-	}
-	cfg := Config{}
-
-	// returns true if value is empty even if is not set
-	fmt.Println(cfg.Name.IsEmpty())
-
-	cfg.Name = cfg.Name.Set("AppName")
-	fmt.Println(cfg.Name.IsEmpty())
-
-	cfg.Name = cfg.Name.Set("")
-	fmt.Println(cfg.Name.IsEmpty())
+	opt = optional.New(8080, true)
+	ptr = opt.Ptr()
+	fmt.Println(ptr != nil)
+	fmt.Println(*ptr)
 
 	// Output:
 	// true
-	// false
-	// true
-}
-
-func ExampleT_SetDefault() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	cfg := Config{}
-
-	// Will be applied because Port is not set
-	cfg.Port = cfg.Port.SetDefault(8080)
-	fmt.Println(cfg.Port.Value())
-
-	// Will not be applied because is set
-	cfg.Port = cfg.Port.SetDefault(9090)
-	fmt.Println(cfg.Port.Value())
-
-	// Output:
-	// 8080
-	// 8080
-}
-
-func ExampleT_SetDefault_in_struct() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	passedCfg := Config{}
-
-	cfgWithDefaults := Config{
-		Port: passedCfg.Port.SetDefault(8080),
-	}
-
-	fmt.Println(cfgWithDefaults.Port.Value())
-
-	// Output:
-	// 8080
-}
-
-func ExampleNewSet() {
-	opt := optional.NewSet("Hello, World!")
-	fmt.Println(opt.IsSet())
-	fmt.Println(opt.Value())
-
-	// Output:
-	// true
-	// Hello, World!
-}
-
-func ExampleNewSet_empty() {
-	opt := optional.NewSet("")
-	fmt.Println(opt.IsSet())
-	fmt.Println(opt.Value())
-
-	// Output:
-	// true
-}
-
-func ExampleNewSetNotEmpty() {
-	opt := optional.NewSetNotEmpty("")
-	fmt.Println(opt.IsSet())
-
-	opt = optional.NewSetNotEmpty("Hello, World!")
-	fmt.Println(opt.IsSet())
-	fmt.Println(opt.Value())
-
-	// Output:
-	// false
-	// true
-	// Hello, World!
-}
-
-func ExampleT_SetPtr() {
-	type Config struct {
-		Port optional.T[int]
-	}
-	cfg := Config{}
-
-	// Creating a pointer to a value
-	port := 8080
-	portPtr := &port
-
-	// Setting value from the pointer
-	cfg.Port = cfg.Port.SetPtr(portPtr)
-	fmt.Println(cfg.Port.IsSet())
-	fmt.Println(cfg.Port.Value())
-
-	// Setting nil pointer (value will be unset)
-	var nilPtr *int
-	cfg.Port = cfg.Port.SetPtr(nilPtr)
-	fmt.Println(cfg.Port.IsSet())
-
-	// Output:
 	// true
 	// 8080
-	// false
+}
+
+func ExampleT_MustValue_panic() {
+	var opt optional.T[string]
+
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered from panic:", r)
+		}
+	}()
+
+	opt.MustValue() // This will panic
+
+	// Output: Recovered from panic: value is not set
+}
+
+func ExampleNew_customTypes() {
+	type User struct {
+		ID   int
+		Name string
+	}
+
+	// Custom struct
+	user := User{ID: 1, Name: "John"}
+	opt1 := optional.New(user, true)
+	fmt.Println(opt1.IsSet())
+	fmt.Println(opt1.Value())
+
+	// Slice
+	slice := []string{"hello", "world"}
+	opt2 := optional.New(slice, len(slice) > 0)
+	fmt.Println(opt2.IsSet())
+	fmt.Println(opt2.Value())
+
+	// Output:
+	// true
+	// {1 John}
+	// true
+	// [hello world]
+}
+
+func ExampleNewPtr_configuration() {
+	type DatabaseConfig struct {
+		Host     string
+		Port     optional.T[int]
+		Username optional.T[string]
+		SSL      optional.T[bool]
+	}
+
+	// Function to create config from pointers
+	createConfig := func(host string, port *int, username *string, ssl *bool) DatabaseConfig {
+		return DatabaseConfig{
+			Host:     host,
+			Port:     optional.NewPtr(port),
+			Username: optional.NewPtr(username),
+			SSL:      optional.NewPtr(ssl),
+		}
+	}
+
+	// Usage
+	port := 5432
+	username := "admin"
+	config := createConfig("localhost", &port, &username, nil)
+
+	fmt.Println("Host:", config.Host)
+	fmt.Println("Port set:", config.Port.IsSet())
+	fmt.Println("Username set:", config.Username.IsSet())
+	fmt.Println("SSL set:", config.SSL.IsSet())
+
+	// Output:
+	// Host: localhost
+	// Port set: true
+	// Username set: true
+	// SSL set: false
+}
+
+func ExampleT_Ptr_apiIntegration() {
+	type APIPayload struct {
+		Name string `json:"name"`
+		Age  *int   `json:"age,omitempty"`
+	}
+
+	type User struct {
+		Name string
+		Age  optional.T[int]
+	}
+
+	user := User{
+		Name: "John",
+		Age:  optional.New(30, true),
+	}
+
+	// Convert to API payload using Ptr()
+	payload := APIPayload{
+		Name: user.Name,
+		Age:  user.Age.Ptr(), // Returns *int or nil
+	}
+
+	fmt.Println("Name:", payload.Name)
+	fmt.Println("Age not nil:", payload.Age != nil)
+
+	// Output:
+	// Name: John
+	// Age not nil: true
 }
