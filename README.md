@@ -19,7 +19,7 @@ Traditional Go code uses pointers for optional fields, which leads to:
 ## Installation
 
 ```bash
-go get github.com/kiteggrad/optional
+go get github.com/kiteggrad/optional/v2
 ```
 
 ## Quick Start
@@ -28,7 +28,7 @@ go get github.com/kiteggrad/optional
 import (
 	"fmt"
 	"flag"
-	"github.com/kiteggrad/optional"
+	"github.com/kiteggrad/optional/v2"
 )
 
 var portFlag = flag.Int("port", 8080, "Server port") // *int

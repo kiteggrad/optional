@@ -3,7 +3,7 @@ package optional_test
 import (
 	"fmt"
 
-	"github.com/kiteggrad/optional"
+	"github.com/kiteggrad/optional/v2"
 )
 
 func ExampleNew() {
